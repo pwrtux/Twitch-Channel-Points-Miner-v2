@@ -188,17 +188,17 @@ class TwitchLogin(object):
         if "persistent" not in cookies_dict:  # saving user id cookies
             cookies_dict["persistent"] = self.user_id
 
-        self.cookies = []
-        for cookie_name, value in cookies_dict.items():
-            self.cookies.append({"name": cookie_name, "value": value})
+        self.cookies = [
+            {"name": cookie_name, "value": value}
+            for cookie_name, value in cookies_dict.items()
+        ]
         with open(cookies_file, "wb") as f:
             pickle.dump(self.cookies, f)
 
     def get_cookie_value(self, key):
         for cookie in self.cookies:
-            if cookie["name"] == key:
-                if cookie["value"] is not None:
-                    return cookie["value"]
+            if cookie["name"] == key and cookie["value"] is not None:
+                return cookie["value"]
         return None
 
     def load_cookies(self, cookies_file):
