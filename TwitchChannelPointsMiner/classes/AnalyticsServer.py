@@ -89,23 +89,23 @@ def read_json(streamer, return_response=True):
 
     path = Settings.analytics_path
     streamer = streamer if streamer.endswith(".json") else f"{streamer}.json"
+    
+    if streamer not in streamers_available():
+        if return_response:
+            return Response(json.dumps([]), status=200, mimetype="application/json")
+        return []
+    
+    file_path = os.path.join(path, streamer)
+    with open(file_path, "r") as f:
+        data = json.load(f)
+    
     if return_response is True:
         return Response(
-            json.dumps(
-                filter_datas(
-                    start_date, end_date, json.load(open(os.path.join(path, streamer)))
-                )
-            )
-            if streamer in streamers_available()
-            else [],
+            json.dumps(filter_datas(start_date, end_date, data)),
             status=200,
             mimetype="application/json",
         )
-    return (
-        json.load(open(os.path.join(path, streamer)))
-        if streamer in streamers_available()
-        else []
-    )
+    return data
 
 
 def get_challenge_points(streamer):

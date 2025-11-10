@@ -191,7 +191,8 @@ class TwitchLogin(object):
         self.cookies = []
         for cookie_name, value in cookies_dict.items():
             self.cookies.append({"name": cookie_name, "value": value})
-        pickle.dump(self.cookies, open(cookies_file, "wb"))
+        with open(cookies_file, "wb") as f:
+            pickle.dump(self.cookies, f)
 
     def get_cookie_value(self, key):
         for cookie in self.cookies:
@@ -202,7 +203,8 @@ class TwitchLogin(object):
 
     def load_cookies(self, cookies_file):
         if os.path.isfile(cookies_file):
-            self.cookies = pickle.load(open(cookies_file, "rb"))
+            with open(cookies_file, "rb") as f:
+                self.cookies = pickle.load(f)
         else:
             raise WrongCookiesException("There must be a cookies file!")
 
