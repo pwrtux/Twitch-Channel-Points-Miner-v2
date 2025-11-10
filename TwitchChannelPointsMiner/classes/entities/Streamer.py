@@ -233,12 +233,18 @@ class Streamer(object):
 
         fname = os.path.join(Settings.analytics_path, f"{self.username}.json")
         with self.mutex:
-            json_data = json.load(open(fname, "r")) if os.path.isfile(fname) else {}
+            if os.path.isfile(fname):
+                with open(fname, "r") as f:
+                    json_data = json.load(f)
+            else:
+                json_data = {}
+            
             if key not in json_data:
                 json_data[key] = []
 
             json_data[key].append(data)
-            json.dump(json_data, open(fname, "w"), indent=4)
+            with open(fname, "w") as f:
+                json.dump(json_data, f, indent=4)
 
     def leave_chat(self):
         if self.irc_chat is not None:

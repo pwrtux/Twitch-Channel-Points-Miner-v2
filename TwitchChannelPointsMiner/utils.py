@@ -41,7 +41,7 @@ def server_time(message_data):
 
 # https://en.wikipedia.org/wiki/Cryptographic_nonce
 def create_nonce(length=30) -> str:
-    nonce = ""
+    chars = []
     for i in range(length):
         char_index = randrange(0, 10 + 26 + 26)
         if char_index < 10:
@@ -50,8 +50,8 @@ def create_nonce(length=30) -> str:
             char = chr(ord("a") + char_index - 10)
         else:
             char = chr(ord("A") + char_index - 26 - 10)
-        nonce += char
-    return nonce
+        chars.append(char)
+    return "".join(chars)
 
 
 def get_user_agent(browser: str) -> str:
@@ -161,7 +161,7 @@ def create_chunks(lst, n):
 def download_file(name, fpath):
     r = requests.get(
         path.join(GITHUB_url, name),
-        headers={"User-Anget": get_user_agent("FIREFOX")},
+        headers={"User-Agent": get_user_agent("FIREFOX")},
         stream=True,
     )
     if r.status_code == 200:
@@ -173,7 +173,8 @@ def download_file(name, fpath):
 
 
 def read(fname):
-    return open(path.join(path.dirname(__file__), fname), encoding="utf-8").read()
+    with open(path.join(path.dirname(__file__), fname), encoding="utf-8") as f:
+        return f.read()
 
 
 def init2dict(content):
