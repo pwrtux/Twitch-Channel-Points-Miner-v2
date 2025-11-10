@@ -38,7 +38,7 @@ class WebSocketsPool:
 
     def submit(self, topic):
         # Check if we need to create a new WebSocket instance
-        if self.ws == [] or len(self.ws[-1].topics) >= 50:
+        if not self.ws or len(self.ws[-1].topics) >= 50:
             self.ws.append(self.__new(len(self.ws)))
             self.__start(-1)
 

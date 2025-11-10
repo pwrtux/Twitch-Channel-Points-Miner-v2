@@ -73,7 +73,7 @@ class Stream(object):
     def __str_tags(self):
         return (
             None
-            if self.tags == []
+            if not self.tags
             else ", ".join([tag["localizedName"] for tag in self.tags])
         )
 

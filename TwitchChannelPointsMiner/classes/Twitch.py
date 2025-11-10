@@ -404,7 +404,7 @@ class Twitch(object):
                         next_iteration - time.time(), chunk_size=chunk_size
                     )
 
-                if streamers_watching == []:
+                if not streamers_watching:
                     self.__chuncked_sleep(60, chunk_size=chunk_size)
             except Exception:
                 logger.error("Exception raised in send minute watched", exc_info=True)
